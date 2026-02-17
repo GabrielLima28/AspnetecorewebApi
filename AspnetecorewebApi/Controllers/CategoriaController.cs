@@ -1,5 +1,6 @@
 ﻿using AspnetecorewebApi.Cotexto;
 using AspnetecorewebApi.Model;
+using AspnetecorewebApi.Repository;
 using AspnetecorewebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +31,13 @@ namespace AspnetecorewebApi.Controllers
     [ApiController]
     public class CategoriaController : ControllerBase
     {
-        private readonly AppDbContext _contextCategoria;
+        private readonly ICategoriaRepository categorias; 
         private readonly IConfiguration configuration;
         private readonly ILogger loggerDescripitiom;
 
-        public CategoriaController (AppDbContext _contextCategoria, IConfiguration configuration)
+        public CategoriaController (ICategoriaRepository categoria , IConfiguration configuration)
         {
-            _contextCategoria = _contextCategoria;
+            categorias = categoria;
 
             configuration = configuration; 
         }
@@ -51,30 +52,36 @@ namespace AspnetecorewebApi.Controllers
             return $"chyaves: {minhaConfiguracaochave1}: {minhaConfiguracaochave2} : {secao} ";
         }
 
-        [HttpGet("lista-de-categorias")]
+        [HttpGet("lista-de-categorias-Produtos")]
         
         public ActionResult<IEnumerable<Categoria>> getListaProduto()
         {
             //loguer que retona a mensagem da lista de usuário 
-            loggerDescripitiom.LogInformation("######## Inicializando o retorno da Lista de Usuário #################");
-                
-            return _contextCategoria.Categoria.Include(p => p.Produtos).ToList();
+            loggerDescripitiom.LogInformation("######## Inicializando o retorno da Lista de Categoria/Produto #################");
+
+            var listaCategoriaProduto = categorias.getCategoriasProdutos();
+            return Ok(listaCategoriaProduto);
         }
 
        // [HttpGet("primeiro")]
-        [HttpGet("teste")]
+        [HttpGet("Lista-Categoria")]
        public ActionResult<IEnumerable<Categoria>> get ()
         {
-            try
-            {
-                throw new DataMisalignedException();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Ocorreu um problema ai tratar a sua solicitação"); 
-            }
-          
+            /*try
+             {
+                 throw new DataMisalignedException();
+             }
+             catch (Exception)
+             {
+                 return StatusCode(StatusCodes.Status500InternalServerError,
+                     "Ocorreu um problema ai tratar a sua solicitação"); 
+             }*/
+
+            var listacategoria = categorias.getCategorias();
+            return Ok(listacategoria);
+
+
+
         }
 
         [HttpGet("UsandoFromServices/{nome}")]
@@ -101,17 +108,19 @@ namespace AspnetecorewebApi.Controllers
             return meuServico.bucaid(id);
         }
 
-        [HttpGet("{id:int}/{param2}", Name ="ObrigatoriedadeCategoria")]
+        // [HttpGet("{id:int}/{param2}", Name ="ObrigatoriedadeCategoria")]
+        [HttpGet("{id:int}", Name = "idCategoria")]
         public ActionResult<Categoria> get (int id, string param2  )
         {
             try
             {
                 var parametro = param2;
 
-                var categoria = _contextCategoria.Categoria.FirstOrDefault(c => c.CategoriaId == id);
+                var categoria = categorias.getCategoriaId(id);
                 if (categoria == null)
                 {
-                    return NotFound("Categoria não encontrada");
+                    loggerDescripitiom.LogWarning($"Categoria com id {id} não encontrada");
+                    return NotFound($"Busca de categoria por id={id} não encontrada ....");
                 }
                 return Ok(categoria);
             } catch (Exception ex)
@@ -131,12 +140,12 @@ namespace AspnetecorewebApi.Controllers
             if (categoria is null)
             
                 return BadRequest();
-            _contextCategoria.Add(categoria);
-            _contextCategoria.SaveChanges();
+            var categoriaCriada = categorias.created(categoria); 
+
             return Ok(categoria);
 
-            return new CreatedAtRouteResult("ObrigatoriedadeCategoria",
-                new { id = categoria.CategoriaId }, categoria);
+          //  return new CreatedAtRouteResult("ObrigatoriedadeCategoria",
+            //    new { id = categoria.CategoriaId }, categoria);
 
 
 
@@ -146,11 +155,10 @@ namespace AspnetecorewebApi.Controllers
         {
             if (id != categoria.CategoriaId)
             {
-                return BadRequest(); 
+                return BadRequest("Dados invalidos "); 
             }
-            _contextCategoria.Entry(categoria).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _contextCategoria.SaveChanges();
-            return Ok(categoria); 
+            categorias.updateCategoria(categoria);
+            return Ok(categoria);
 
         }
         //Ele vai definir um valor minimo para o caminho da áplicação
@@ -168,15 +176,15 @@ namespace AspnetecorewebApi.Controllers
         [HttpDelete("{id:int:min(1)}")]
         public ActionResult<Categoria> Delete (int id)
         {
-            var categoria = _contextCategoria.Categoria.FirstOrDefault(c => c.CategoriaId == id); 
+            var categoria = categorias.getCategoriaId(id);
+
             if (categoria is null)
             {
                 return NotFound("Categoria não encontrada ");
 
             }
-            _contextCategoria.Remove(categoria);
-            _contextCategoria.SaveChanges();
-            return Ok(categoria); 
+          var categoriExcluida =  categorias.deleteCategoria(id);
+            return Ok(categoriExcluida); 
         }
     }
 }

@@ -6,6 +6,8 @@ namespace AspnetecorewebApi.Model
     /// <summary>
     /// classe anémica que representa a entidade produto no sistema 
     /// </summary>
+
+    [Table("Produtos")]
     public class Produto
     {
 
