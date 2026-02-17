@@ -8,6 +8,13 @@ namespace AspnetecorewebApi.filter
 
     {
         // seria uma classe de log para registrar as informações da requisição e resposta da APi 
+        /// <summary>
+        /// classe de log para registrar as informações da requisição e resposta da API 
+        /// resumindo o processo de execução da ação, o filtro de ação é executado antes e depois da 
+        /// execução da ação do controlador, permitindo que você registre informações relevantes sobre 
+        /// a requisição, como o tempo de execução, os parâmetros de entrada e a resposta gerada.
+        /// 
+        /// </summary>
 
         private readonly ILogger<ApiLoggingFilter> logger;
 
