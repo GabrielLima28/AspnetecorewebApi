@@ -18,13 +18,6 @@ Demonstração da **configuração e gerenciamento de um banco de dados MySQL em
 docker volume create volume
 ````
 ### 2. Criando o Container
-
-docker container run -d \
-  --name mysql \
-  -p 3306:3306 \
-  -v <nome_do_volume>:/var/lib/mysql \
-  -e MYSQL_ROOT_PASSWORD=123 \
-  -e MYSQL_USER=<nome_do_usuario> \
-  -e MYSQL_PASSWORD=123 \
-  mysql:latest
+```bash
+##docker container run -d --name mysql -p 3306:3306 -v <nome_do_volume>:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123 -e MYSQL_USER=<nome_do_usuario>  -e MYSQL_PASSWORD=123  mysql:latest
 
