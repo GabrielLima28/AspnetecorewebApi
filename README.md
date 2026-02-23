@@ -37,6 +37,9 @@ E para aplicar  ao banco de dados utilize o comando:
 dotnet ef database update
  ```
 <img width="678" height="52" alt="image" src="https://github.com/user-attachments/assets/858d0449-9b14-4a18-9bac-79c333721d3e" />
+
+
+
 ### 4. verificação da migração do banco de dados  no container docker:
 #### 1 Primeiro, entre dentro do container:
 ```Bash:
