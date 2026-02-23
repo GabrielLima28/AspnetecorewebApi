@@ -21,4 +21,11 @@ docker volume create volume
 ```bash
 ##docker container run -d --name mysql -p 3306:3306 -v <nome_do_volume>:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123 -e MYSQL_USER=<nome_do_usuario>  -e MYSQL_PASSWORD=123  mysql:latest
 docker container run -d --name mysql -p 3306:3306 -v volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123 -e MYSQL_USER=Gabriel  -e MYSQL_PASSWORD=Admin123  mysql:latest
+```
+
+
+https://github.com/user-attachments/assets/d3fc448e-9128-4cd9-9074-2ad4f52a2293
+
+
+
 
