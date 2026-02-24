@@ -1,8 +1,7 @@
 
 # Projeto de Cadastro 📋
 
-Este repositório é dedicado a uma pequena demonstração de um mini projeto de cadastro, incluindo a configuração do banco de dados utilizando **Docker**.
-
+Este repositório apresenta um projeto de exemplo de um sistema de cadastro, criado como parte de um exercício de aprendizado, incluindo a configuração do banco de dados utilizando Docker.
 ## Configuração do Banco de Dados 🐬
 
 Demonstração da **configuração e gerenciamento de um banco de dados MySQL em ambiente containerizado com Docker**, utilizando volumes para persistência de dados e variáveis de ambiente para definir credenciais de acesso, com a utilização da interface gráfica do **DataGrip** para visualizar e interagir com o banco.
